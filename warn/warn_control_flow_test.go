@@ -655,6 +655,40 @@ foo()
 		scopeEverywhere)
 
 	checkFindings(t, "unused-variable", `
+def foo(x):  # @unused
+  pass
+
+def bar(
+    x,
+    y):  # @unused
+  pass
+
+foo()
+bar()
+`,
+		[]string{
+			":5: Variable \"x\" is unused.",
+		},
+		scopeEverywhere)
+
+	checkFindings(t, "unused-variable", `
+def foo(x) -> int:  # @unused
+  pass
+
+def bar(
+    x,
+    y) -> int:  # @unused
+  pass
+
+foo()
+bar()
+`,
+		[]string{
+			":5: Variable \"x\" is unused.",
+		},
+		scopeEverywhere)
+
+	checkFindings(t, "unused-variable", `
 def foo(
     name,
     x):
